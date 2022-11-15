@@ -9,10 +9,6 @@ import { Tabs, Icon, Badge, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import Base from './base';
 import { DvaRouterProps, GlobalStore } from '@/common/types';
-import Changelog from './changelog';
-import IconFont from '@/components/IconFont';
-import Powerpack from './powerpack';
-import Privacy from './privacy';
 import locale from '@/common/locales';
 import Container from 'typedi';
 import { IConfigService } from '@/service/common/config';
@@ -55,25 +51,7 @@ const tabs = [
     icon: <Icon type="setting" />,
     title: <FormattedMessage id="preference.tab.basic" defaultMessage="Basic" />,
     component: Base,
-  },
-  {
-    path: 'powerpack',
-    icon: <IconFont type="powerpack" />,
-    title: <FormattedMessage id="preference.tab.powerpack" defaultMessage="Powerpack" />,
-    component: Powerpack,
-  },
-  {
-    path: 'privacy',
-    icon: <IconFont type="privacy" />,
-    title: <FormattedMessage id="preference.tab.privacy" defaultMessage="Privacy policy" />,
-    component: Privacy,
-  },
-  {
-    path: 'changelog',
-    icon: <IconFont type="changelog" />,
-    title: <FormattedMessage id="preference.tab.changelog" defaultMessage="Changelog" />,
-    component: Changelog,
-  },
+  }
 ];
 
 type PageProps = DvaRouterProps & PageStateProps;

@@ -1,5 +1,3 @@
-import { Container } from 'typedi';
-import { PowerpackUserInfo, IPowerpackService } from '@/service/common/powerpack';
 import { getLanguage } from './locales/index';
 import { LOCAL_USER_PREFERENCE_LOCALE_KEY } from '@/common/modelTypes/userPreference';
 import { extend } from 'umi-request';
@@ -16,14 +14,13 @@ const request = extend({
 
 request.interceptors.request.use(
   (url, options) => {
-    const powerpackService = Container.get(IPowerpackService);
     return {
       url,
       options: {
         ...options,
         headers: {
           ...options.headers,
-          token: powerpackService.accessToken || '',
+          token: LOCAL_ACCESS_TOKEN_LOCALE_KEY || '',
           locale: localStorageService.get(LOCAL_USER_PREFERENCE_LOCALE_KEY, getLanguage()),
         },
       },
@@ -54,10 +51,6 @@ request.interceptors.response.use(
   },
   { global: false }
 );
-
-export const getUserInfo = () => {
-  return request.get<IResponse<PowerpackUserInfo>>('user');
-};
 
 export interface PostMailRequestBody {
   to: string;

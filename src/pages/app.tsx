@@ -22,7 +22,6 @@ import { message } from 'antd';
 import config from '@/config';
 import { IConfigService } from '@/service/common/config';
 import { ILocalStorageService, ISyncStorageService } from '@/service/common/storage';
-import { IPowerpackService } from '@/service/common/powerpack';
 import './app.less';
 import { ITrackService } from '@/service/common/track';
 
@@ -49,7 +48,6 @@ export default async () => {
   Container.set(ILocalStorageService, localStorageService);
   Container.set(ISyncStorageService, syncStorageService);
   Container.get(IConfigService).load();
-  Container.get(IPowerpackService).startup();
   Container.get(ITrackService).init();
   const app = dva({
     namespacePrefixWarning: false,

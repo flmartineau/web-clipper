@@ -49,7 +49,7 @@ const Base: React.FC<PageProps> = props => {
       description: (
         <FormattedMessage
           id="preference.basic.configLanguage.description"
-          defaultMessage="My native language is Chinese,Welcome to submit a translation on GitHub"
+          defaultMessage="Change extension language"
           values={{
             GitHub: (
               <a

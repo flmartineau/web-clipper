@@ -18,7 +18,6 @@ import { installRemoteExtension } from '@/actions/extension';
 import { hasUpdate } from '@/common/version';
 import Container from 'typedi';
 import { IConfigService } from '@/service/common/config';
-import usePowerpack from '@/common/hooks/usePowerpack';
 
 interface RemoteExtensionProps {
   host: string;
@@ -29,15 +28,13 @@ interface DownloadButtonProps {
   localVersion: string;
   host: string;
   extensions: Map<string, SerializedExtensionWithId>;
-  havePowerPack: boolean;
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({
   manifest,
   localVersion,
   host,
-  extensions,
-  havePowerPack,
+  extensions
 }) => {
   const dispatch = useDispatch();
   const fetchExtension = useAsync((id: string) => Axios(`${host}/extensions/${id}`), [], {
@@ -55,20 +52,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   });
   if (fetchExtension.loading) {
     return <Icon type="loading" spin={true}></Icon>;
-  }
-  if (manifest.manifest.powerpack && !havePowerPack) {
-    return (
-      <Tooltip
-        title={
-          <FormattedMessage
-            id="preference.extensions.require.powerpack"
-            defaultMessage="Powerpack is required"
-          />
-        }
-      >
-        <Icon style={{ cursor: 'not-allowed' }} type="download" />
-      </Tooltip>
-    );
   }
   if (manifest.manifest.apiVersion && hasUpdate(manifest.manifest.apiVersion, localVersion)) {
     return (
@@ -123,7 +106,6 @@ const selector = ({ extension: { extensions }, userPreference: { locale } }: Glo
 const Page: React.FC<RemoteExtensionProps> = ({ host }) => {
   const { loading, result, error } = useAsync(() => Axios(`${host}/extensions/index`));
   const { locale, extensions } = useSelector(selector);
-  const { bought, expired } = usePowerpack();
   const configService = Container.get(IConfigService);
   const remoteExtensions = useMemo<SerializedExtensionInfo[]>(() => {
     if (!result || !result.data) {
@@ -142,7 +124,6 @@ const Page: React.FC<RemoteExtensionProps> = ({ host }) => {
   const cardActions = (e: SerializedExtensionInfo) => {
     return [
       <DownloadButton
-        havePowerPack={bought && !expired}
         manifest={e}
         key="download"
         localVersion={configService.localVersion}
