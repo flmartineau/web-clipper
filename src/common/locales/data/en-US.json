@@ -19,8 +19,6 @@
   "backend.services.joplin.filter_unused_tags": "",
   "backend.services.joplin.headerForm.tags": "",
   "backend.services.joplin.name": "",
-  "backend.services.kindle.form.alert": "",
-  "backend.services.kindle.name": "Send to Kindle",
   "backend.services.mail.form.address.is.required": "",
   "backend.services.mail.form.homepage": "",
   "backend.services.mail.form.homepage.is.required": "",

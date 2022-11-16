@@ -122,8 +122,7 @@ const Page = React.memo<PageProps>(
           pathname,
           currentImageHostingService,
         };
-        // eslint-disable-next-line no-eval
-        return eval(o.init);
+        return true;
       }
       return true;
     });

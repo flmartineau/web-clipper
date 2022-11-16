@@ -1,4 +1,3 @@
-import * as QRCode from 'qrcode';
 import * as Readability from '@web-clipper/readability';
 import styles from './index.less';
 import AreaSelector from '@web-clipper/area-selector';
@@ -53,7 +52,6 @@ const listeners = new MessageListenerCombiner()
           Readability,
           document,
           AreaSelector,
-          QRCode,
           $,
         };
         try {

@@ -142,6 +142,8 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
           type: type,
         };
         const imageHostingService = imageHostingServiceFactory(type, info);
+        console.log("145 :");
+        console.log( imageHostingService);
         backend.setImageHostingService(imageHostingService);
       } else {
         const imageHostingIndex = imageHosting.findIndex(o => o.id === account.imageHosting);
@@ -226,6 +228,10 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
     }
     const data = yield select((g: GlobalStore) => g.clipper.clipperData[pathname]);
     let createDocumentRequest: CreateDocumentRequest | null = null;
+    console.log(createDocumentRequest);
+    console.log(data);
+
+
     if (extension.type === ExtensionType.Text) {
       createDocumentRequest = {
         repositoryId,
@@ -235,6 +241,7 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
     }
     if (extension.type === ExtensionType.Image) {
       const imageHostingService = backend.getImageHostingService();
+      console.log(imageHostingService);
       if (!imageHostingService) {
         message.error('No image Hosting');
         return;
