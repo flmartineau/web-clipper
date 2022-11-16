@@ -8,7 +8,6 @@ export const asyncAddAccount = actionCreator.async<
   {
     id: string;
     info: any;
-    imageHosting?: string;
     defaultRepositoryId?: string;
     userInfo: UserInfo;
     type: string;
@@ -43,7 +42,6 @@ export const asyncUpdateAccount = actionCreator<{
   id: string;
   account: {
     info: any;
-    imageHosting?: string;
     defaultRepositoryId?: string;
     type: string;
   };

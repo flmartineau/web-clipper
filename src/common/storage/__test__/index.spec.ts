@@ -22,7 +22,6 @@ class MockStorage implements CommonStorage {
 describe('test storage', () => {
   let storage: TypedCommonStorageInterface;
   const defaultPreference: PreferenceStorage = {
-    imageHosting: [],
     defaultPluginId: undefined,
     showLineNumber: true,
     liveRendering: true,

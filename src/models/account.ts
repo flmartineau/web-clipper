@@ -52,11 +52,10 @@ model.takeEvery(asyncAddAccount.started, function*(payload, { select, call }) {
     return { accounts };
   };
   const { accounts }: ReturnType<typeof selector> = yield select(selector);
-  const { info, imageHosting, defaultRepositoryId, type, userInfo, callback, id } = payload;
+  const { info, defaultRepositoryId, type, userInfo, callback, id } = payload;
   const userPreference: AccountPreference = {
     ...userInfo,
     ...info,
-    imageHosting,
     defaultRepositoryId,
     type,
     id,
@@ -107,7 +106,7 @@ model.takeEvery(asyncUpdateAccount, function*(payload, { select, put, call }) {
   const { accounts, defaultAccountId }: ReturnType<typeof selector> = yield select(selector);
   const {
     id,
-    account: { info, defaultRepositoryId, imageHosting },
+    account: { info, defaultRepositoryId },
     userInfo,
     newId,
     callback,
@@ -123,7 +122,6 @@ model.takeEvery(asyncUpdateAccount, function*(payload, { select, put, call }) {
       $merge: {
         id: newId,
         defaultRepositoryId,
-        imageHosting,
         ...userInfo,
         ...info,
       },

@@ -7,7 +7,6 @@ export interface AccountPreference {
   homePage: string;
   description?: string;
   defaultRepositoryId?: string;
-  imageHosting?: string;
 }
 
 export interface AccountStore {

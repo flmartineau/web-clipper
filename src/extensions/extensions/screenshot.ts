@@ -11,7 +11,6 @@ export default new ImageExtension<SelectAreaPosition>(
     },
   },
   {
-    init: ({ currentImageHostingService }) => !!currentImageHostingService,
     run: async context => {
       const { AreaSelector, toggleClipper } = context;
       toggleClipper();

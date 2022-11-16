@@ -1,13 +1,12 @@
 import { Container } from 'typedi';
 import React from 'react';
 import { IPermissionsService } from '@/service/common/permissions';
-import { BUILT_IN_IMAGE_HOSTING_ID } from '@/common/backend/imageHosting/interface';
 import { updateClipperHeader } from './../actions/clipper';
 import { asyncRunExtension } from './../actions/userPreference';
 import { CompleteStatus } from 'common/backend/interface';
 import { ExtensionType } from '@web-clipper/extensions';
 import { CreateDocumentRequest, UnauthorizedError } from '@/common/backend/services/interface';
-import { GlobalStore, ImageClipperData, ClipperStore } from '@/common/types';
+import { GlobalStore, ClipperStore } from '@/common/types';
 import { DvaModelBuilder, removeActionNamespace } from 'dva-model-creator';
 import update from 'immutability-helper';
 import {
@@ -18,9 +17,9 @@ import {
   changeData,
   watchActionChannel,
 } from 'pageActions/clipper';
-import backend, { documentServiceFactory, imageHostingServiceFactory } from 'common/backend';
+import backend, { documentServiceFactory } from 'common/backend';
 import { unpackAccountPreference } from '@/common/account';
-import { message, notification, Button } from 'antd';
+import { notification, Button } from 'antd';
 import { routerRedux } from 'dva';
 import { asyncUpdateAccount } from '@/actions/account';
 import { channel } from 'redux-saga';
@@ -48,17 +47,16 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
   })
   .takeEvery(asyncChangeAccount.started, function*(payload, { call, select, put }) {
     const selector = ({
-      userPreference: { imageHosting, servicesMeta },
+      userPreference: { servicesMeta },
       account: { accounts },
     }: GlobalStore) => {
       return {
         accounts,
-        imageHosting,
         servicesMeta,
       };
     };
     const selectState: ReturnType<typeof selector> = yield select(selector);
-    const { accounts, imageHosting } = selectState;
+    const { accounts } = selectState;
     const currentAccount = accounts.find(o => o.id === payload.id);
     if (!currentAccount) {
       throw new Error('Load Account Error,Account not exist.');
@@ -135,37 +133,11 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
       }
     }
     backend.setDocumentService(documentService);
-    let currentImageHostingService: ClipperStore['currentImageHostingService'];
-    if (account.imageHosting) {
-      if (account.imageHosting === BUILT_IN_IMAGE_HOSTING_ID) {
-        currentImageHostingService = {
-          type: type,
-        };
-        const imageHostingService = imageHostingServiceFactory(type, info);
-        console.log("145 :");
-        console.log( imageHostingService);
-        backend.setImageHostingService(imageHostingService);
-      } else {
-        const imageHostingIndex = imageHosting.findIndex(o => o.id === account.imageHosting);
-        if (imageHostingIndex !== -1) {
-          const accountImageHosting = imageHosting[imageHostingIndex];
-          const imageHostingService = imageHostingServiceFactory(
-            accountImageHosting.type,
-            accountImageHosting.info
-          );
-          backend.setImageHostingService(imageHostingService);
-          currentImageHostingService = {
-            type: accountImageHosting.type,
-          };
-        }
-      }
-    }
     yield put(
       asyncChangeAccount.done({
         params: payload,
         result: {
-          repositories,
-          currentImageHostingService,
+          repositories
         },
       })
     );
@@ -240,26 +212,11 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
       };
     }
     if (extension.type === ExtensionType.Image) {
-      const imageHostingService = backend.getImageHostingService();
-      console.log(imageHostingService);
-      if (!imageHostingService) {
-        message.error('No image Hosting');
-        return;
-      }
-      try {
-        const responseUrl: string = yield call(imageHostingService.uploadImage, {
-          data: (data as ImageClipperData).dataUrl,
-        });
         createDocumentRequest = {
           repositoryId,
-          content: `![](${responseUrl})`,
+          content: data as string,
           ...clipperHeaderForm,
         };
-      } catch (_error) {
-        message.error(_error.message);
-        yield put(asyncCreateDocument.failed({ params: { pathname }, error: null }));
-        return;
-      }
     }
     if (!createDocumentRequest) {
       return;
@@ -281,7 +238,7 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
   })
   .case(
     asyncChangeAccount.done,
-    (state, { params: { id }, result: { repositories, currentImageHostingService } }) => {
+    (state, { params: { id }, result: { repositories } }) => {
       return update(state, {
         currentAccountId: {
           $set: id,
@@ -292,10 +249,7 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
         currentRepository: {
           // eslint-disable-next-line no-undefined
           $set: undefined,
-        },
-        currentImageHostingService: {
-          $set: currentImageHostingService,
-        },
+        }
       });
     }
   )

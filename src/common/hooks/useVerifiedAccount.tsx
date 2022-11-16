@@ -52,7 +52,7 @@ const useVerifiedAccount = ({ form, services, initAccount }: UseVerifiedAccountP
       if (error) {
         return;
       }
-      const { type, defaultRepositoryId, imageHosting, ...info } = values;
+      const { type, defaultRepositoryId, ...info } = values;
       run(info);
     });
   }, [form, run]);
@@ -99,7 +99,7 @@ const useVerifiedAccount = ({ form, services, initAccount }: UseVerifiedAccountP
 
   const _formInfo = useMemo(() => {
     const values = form.getFieldsValue();
-    const { defaultRepositoryId, type: curT, imageHosting, ...info } = values;
+    const { defaultRepositoryId, type: curT, ...info } = values;
     if (type !== curT) {
       return null;
     }

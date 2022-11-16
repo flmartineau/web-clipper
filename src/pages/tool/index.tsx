@@ -25,7 +25,7 @@ import IconFont from '@/components/IconFont';
 import UserItem from '@/components/userItem';
 
 const mapStateToProps = ({
-  clipper: { currentAccountId, url, currentRepository, repositories, currentImageHostingService },
+  clipper: { currentAccountId, url, currentRepository, repositories },
   loading,
   account: { accounts },
   userPreference: { locale, servicesMeta },
@@ -45,7 +45,6 @@ const mapStateToProps = ({
         }
         return true;
       }),
-    currentImageHostingService,
     url,
     currentAccountId,
     currentRepository,
@@ -67,7 +66,6 @@ const Page = React.memo<PageProps>(
       loadingAccount,
       extensions,
       url,
-      currentImageHostingService,
       history: {
         location: { pathname },
       },
@@ -120,7 +118,6 @@ const Page = React.memo<PageProps>(
           },
           url,
           pathname,
-          currentImageHostingService,
         };
         return true;
       }

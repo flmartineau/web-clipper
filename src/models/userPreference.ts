@@ -9,14 +9,10 @@ import storage from 'common/storage';
 import * as antd from 'antd';
 import { GlobalStore } from '@/common/types';
 import { hideTool, removeTool } from 'browserActions/message';
-import update from 'immutability-helper';
 import {
   asyncSetEditorLiveRendering,
   asyncSetShowLineNumber,
   initUserPreference,
-  asyncDeleteImageHosting,
-  asyncAddImageHosting,
-  asyncEditImageHosting,
   asyncHideTool,
   asyncRemoveTool,
   asyncRunExtension,
@@ -27,9 +23,8 @@ import {
 import { initTabInfo, changeData, asyncChangeAccount } from 'pageActions/clipper';
 import { DvaModelBuilder, removeActionNamespace } from 'dva-model-creator';
 import { UserPreferenceStore } from 'common/types';
-import { getServices, getImageHostingServices, imageHostingServiceFactory } from 'common/backend';
+import { getServices } from 'common/backend';
 import { ToolContext } from '@web-clipper/extensions';
-import backend from 'common/backend/index';
 import { loadImage } from 'common/blob';
 import { routerRedux } from 'dva';
 import { localStorageService, syncStorageService } from '@/common/chrome/storage';
@@ -44,9 +39,7 @@ const { message } = antd;
 
 const defaultState: UserPreferenceStore = {
   locale: getLanguage(),
-  imageHosting: [],
   servicesMeta: {},
-  imageHostingServicesMeta: {},
   showLineNumber: true,
   liveRendering: true,
 };
@@ -63,28 +56,7 @@ const builder = new DvaModelBuilder(defaultState, 'userPreference')
   .case(initUserPreference, (state, payload) => ({
     ...state,
     ...payload,
-  }))
-  .case(asyncDeleteImageHosting.done, (state, { result }) =>
-    update(state, {
-      imageHosting: {
-        $set: result,
-      },
-    })
-  )
-  .case(asyncAddImageHosting.done, (state, { result }) =>
-    update(state, {
-      imageHosting: {
-        $set: result,
-      },
-    })
-  )
-  .case(asyncEditImageHosting.done, (state, { result }) =>
-    update(state, {
-      imageHosting: {
-        $set: result,
-      },
-    })
-  );
+  }));
 
 builder
   .takeEvery(asyncSetShowLineNumber.started, function*(payload, { call, put }) {
@@ -121,69 +93,6 @@ builder
   .takeEvery(asyncRemoveTool.started, function*(_, { call }) {
     const tabService = Container.get(ITabService);
     yield call(tabService.sendActionToCurrentTab, removeTool());
-  })
-  .takeEvery(asyncEditImageHosting.started, function*(payload, { call, put }) {
-    const { id, value, closeModal } = payload;
-    try {
-      const imageHostingList = yield call(storage.editImageHostingById, id, {
-        ...value,
-        id,
-      });
-      yield put(
-        asyncEditImageHosting.done({
-          params: payload,
-          result: imageHostingList,
-        })
-      );
-      closeModal();
-    } catch (error) {
-      message.error(error.message);
-    }
-  })
-  .takeEvery(asyncDeleteImageHosting.started, function*(payload, { call, put }) {
-    const imageHostingList: PromiseType<ReturnType<
-      typeof storage.deleteImageHostingById
-    >> = yield call(storage.deleteImageHostingById, payload.id);
-    yield put(
-      asyncDeleteImageHosting.done({
-        params: payload,
-        result: imageHostingList,
-      })
-    );
-  })
-  .takeEvery(asyncAddImageHosting.started, function*(payload, { call, put }) {
-    const { info, type, closeModal, remark } = payload;
-    const imageHostingService: ReturnType<typeof imageHostingServiceFactory> = yield call(
-      imageHostingServiceFactory,
-      type,
-      info
-    );
-    if (!imageHostingService) {
-      message.error('不支持');
-      return;
-    }
-    const id = imageHostingService.getId();
-    const imageHosting = {
-      id,
-      type,
-      info,
-      remark,
-    };
-    try {
-      const imageHostingList: PromiseType<ReturnType<typeof storage.addImageHosting>> = yield call(
-        storage.addImageHosting,
-        imageHosting
-      );
-      yield put(
-        asyncAddImageHosting.done({
-          params: payload,
-          result: imageHostingList,
-        })
-      );
-      closeModal();
-    } catch (error) {
-      message.error(error.message);
-    }
   })
   .takeEvery(asyncRunExtension.started, function*({ extension, pathname }, { call, put, select }) {
     let result;
@@ -226,7 +135,6 @@ builder
             result,
             data,
             message,
-            imageService: backend.getImageHostingService(),
             loadImage: loadImage,
             captureVisibleTab: tabService.captureVisibleTab,
             copyToClipboard,
@@ -305,15 +213,10 @@ builder
       return previousValue;
     }, {} as UserPreferenceStore['servicesMeta']);
 
-    const imageHostingServicesMeta = getImageHostingServices().reduce((previousValue, meta) => {
-      previousValue[meta.type] = meta;
-      return previousValue;
-    }, {} as UserPreferenceStore['imageHostingServicesMeta']);
     dispatch(
       removeActionNamespace(
         initServices({
-          imageHostingServicesMeta,
-          servicesMeta,
+          servicesMeta
         })
       )
     );
@@ -325,25 +228,19 @@ builder
           previousValue[meta.type] = meta;
           return previousValue;
         }, {} as UserPreferenceStore['servicesMeta']);
-        const imageHostingServicesMeta = getImageHostingServices().reduce((previousValue, meta) => {
-          previousValue[meta.type] = meta;
-          return previousValue;
-        }, {} as UserPreferenceStore['imageHostingServicesMeta']);
         dispatch(
           removeActionNamespace(
             initServices({
-              imageHostingServicesMeta,
-              servicesMeta,
+              servicesMeta
             })
           )
         );
       }
     });
   })
-  .case(initServices, (state, { imageHostingServicesMeta, servicesMeta }) => {
+  .case(initServices, (state, { servicesMeta }) => {
     return {
       ...state,
-      imageHostingServicesMeta,
       servicesMeta,
     };
   });

@@ -28,15 +28,13 @@ const useActions = {
 const mapStateToProps = ({
   clipper: { currentAccountId },
   account: { accounts, defaultAccountId },
-  userPreference: { servicesMeta, imageHostingServicesMeta, imageHosting },
+  userPreference: { servicesMeta },
 }: GlobalStore) => {
   return {
     currentAccountId,
-    imageHostingServicesMeta,
     accounts,
     defaultAccountId,
     servicesMeta,
-    imageHosting,
   };
 };
 type PageState = {
@@ -80,12 +78,11 @@ class Page extends React.Component<PageProps, PageState> {
       if (error) {
         return;
       }
-      const { type, defaultRepositoryId, imageHosting, ...info } = values;
+      const { type, defaultRepositoryId, ...info } = values;
       this.props.asyncAddAccount({
         id,
         type,
         defaultRepositoryId,
-        imageHosting,
         info,
         userInfo,
         callback: this.handleCancel,
@@ -119,9 +116,9 @@ class Page extends React.Component<PageProps, PageState> {
       if (error) {
         return;
       }
-      const { type, defaultRepositoryId, imageHosting, ...info } = values;
+      const { type, defaultRepositoryId, ...info } = values;
       asyncUpdateAccount({
-        account: { type, defaultRepositoryId, imageHosting, info },
+        account: { type, defaultRepositoryId, info },
         id,
         newId,
         userInfo,
@@ -134,7 +131,7 @@ class Page extends React.Component<PageProps, PageState> {
 
   getAccountModal = () => {
     const { showAccountModal, currentAccount } = this.state;
-    const { servicesMeta, form, imageHostingServicesMeta, imageHosting } = this.props;
+    const { servicesMeta, form } = this.props;
     const { handleAdd, handleCancel } = this;
     if (!showAccountModal) {
       return;
@@ -144,8 +141,6 @@ class Page extends React.Component<PageProps, PageState> {
         <EditAccountModal
           visible
           form={form}
-          imageHosting={imageHosting}
-          imageHostingServicesMeta={imageHostingServicesMeta}
           servicesMeta={servicesMeta}
           currentAccount={currentAccount}
           onCancel={this.handleCancel}
@@ -157,8 +152,6 @@ class Page extends React.Component<PageProps, PageState> {
       <CreateAccountModal
         visible
         form={form}
-        imageHosting={imageHosting}
-        imageHostingServicesMeta={imageHostingServicesMeta}
         servicesMeta={servicesMeta}
         onAdd={handleAdd}
         onCancel={handleCancel}

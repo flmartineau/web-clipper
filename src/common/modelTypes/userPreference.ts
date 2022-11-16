@@ -1,27 +1,11 @@
-import { ServiceMeta, ImageHostingServiceMeta } from '@/common/backend';
+import { ServiceMeta } from '@/common/backend';
 
 export interface UserPreferenceStore {
   locale: string;
-  imageHosting: ImageHosting[];
   showLineNumber: boolean;
   liveRendering: boolean;
   servicesMeta: {
     [type: string]: ServiceMeta;
-  };
-  imageHostingServicesMeta: {
-    [type: string]: ImageHostingServiceMeta;
-  };
-}
-
-/**
- * 图床配置的数据结构
- */
-export interface ImageHosting {
-  id: string;
-  type: string;
-  remark?: string;
-  info?: {
-    [key: string]: string;
   };
 }
 

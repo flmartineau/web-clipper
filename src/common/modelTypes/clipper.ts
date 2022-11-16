@@ -15,7 +15,6 @@ export interface ClipperStore {
   url?: string;
   currentAccountId: string;
   repositories: Repository[];
-  currentImageHostingService?: { type: string };
   currentRepository?: Repository;
   clipperData: {
     [key: string]: ClipperDataType;

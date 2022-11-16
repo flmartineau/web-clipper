@@ -1,4 +1,4 @@
-import { ImageHosting, GlobalStore } from '@/common/types';
+import { GlobalStore } from '@/common/types';
 import { PreferenceStorage } from 'common/storage/interface';
 import { SerializedExtensionWithId } from '@web-clipper/extensions';
 import { actionCreatorFactory } from 'dva-model-creator';
@@ -51,26 +51,9 @@ export const asyncRunExtension = actionCreator.async<
 >('ASYNC_RUN_EXTENSION');
 
 export const asyncRunScript = actionCreator.async<string, void, void>('ASYNC_RUN_SCRIPT');
-
-export const asyncAddImageHosting = actionCreator.async<
-  { closeModal: () => void } & Omit<ImageHosting, 'id'>,
-  ImageHosting[],
-  void
->('ASYNC_ADD_IMAGE_HOSTING');
-
-export const asyncDeleteImageHosting = actionCreator.async<{ id: string }, ImageHosting[], void>(
-  'ASYNC_DELETE_IMAGE_HOSTING'
-);
-
-export const asyncEditImageHosting = actionCreator.async<
-  { id: string; value: Omit<ImageHosting, 'id'>; closeModal: () => void },
-  ImageHosting[],
-  void
->('ASYNC_EDIT_IMAGE_HOSTING');
-
 export const setLocale = actionCreator<string>('setLocale');
 export const asyncSetLocaleToStorage = actionCreator<string>('asyncSetLocaleToStorage');
 
 export const initServices = actionCreator<
-  Pick<GlobalStore['userPreference'], 'servicesMeta' | 'imageHostingServicesMeta'>
+  Pick<GlobalStore['userPreference'], 'servicesMeta'>
 >('initServices');

@@ -1,22 +1,14 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Form, Modal, Select, Icon } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import styles from './index.less';
-import { ImageHostingServiceMeta } from 'common/backend';
-import { AccountPreference, UserPreferenceStore, ImageHosting } from '@/common/types';
+import { AccountPreference, UserPreferenceStore } from '@/common/types';
 import { FormattedMessage } from 'react-intl';
-import ImageHostingSelect from '@/components/ImageHostingSelect';
-import useFilterImageHostingServices from '@/common/hooks/useFilterImageHostingServices';
 import useVerifiedAccount from '@/common/hooks/useVerifiedAccount';
 import RepositorySelect from '@/components/RepositorySelect';
-import { BUILT_IN_IMAGE_HOSTING_ID } from '@/common/backend/imageHosting/interface';
 
 type PageOwnProps = {
-  imageHostingServicesMeta: {
-    [type: string]: ImageHostingServiceMeta;
-  };
   servicesMeta: UserPreferenceStore['servicesMeta'];
-  imageHosting: ImageHosting[];
   currentAccount: AccountPreference;
   visible: boolean;
   onCancel(): void;
@@ -41,11 +33,8 @@ const Page: React.FC<PageProps> = ({
   form: { getFieldDecorator },
   onCancel,
   onEdit,
-  imageHosting,
-  imageHostingServicesMeta,
 }) => {
   const {
-    type,
     accountStatus: { verified, repositories, userInfo, id },
     verifyAccount,
     serviceForm,
@@ -59,21 +48,6 @@ const Page: React.FC<PageProps> = ({
   useLayoutEffect(() => {
     verifyAccount(currentAccount);
   }, [currentAccount, verifyAccount]);
-
-  const imageHostingWithBuiltIn = useMemo(() => {
-    const res = [...imageHosting];
-    const meta = imageHostingServicesMeta[type];
-    if (meta?.builtIn) {
-      res.push({ type, info: {}, id: BUILT_IN_IMAGE_HOSTING_ID, remark: meta.builtInRemark });
-    }
-    return res;
-  }, [imageHosting, imageHostingServicesMeta, type]);
-
-  const supportedImageHostingServices = useFilterImageHostingServices({
-    backendServiceType: currentAccount.type,
-    imageHostingServices: imageHostingWithBuiltIn,
-    imageHostingServicesMap: imageHostingServicesMeta,
-  });
 
   const okText = verifying ? (
     <FormattedMessage id="preference.accountList.verifying" defaultMessage="Verifying" />
@@ -125,20 +99,6 @@ const Page: React.FC<PageProps> = ({
               loading={verifying}
               repositories={repositories}
             />
-          )}
-        </Form.Item>
-        <Form.Item
-          label={
-            <FormattedMessage id="preference.accountList.imageHost" defaultMessage="Image Host" />
-          }
-        >
-          {getFieldDecorator('imageHosting', {
-            initialValue: currentAccount.imageHosting,
-          })(
-            <ImageHostingSelect
-              disabled={!verified}
-              supportedImageHostingServices={supportedImageHostingServices}
-            ></ImageHostingSelect>
           )}
         </Form.Item>
       </Form>

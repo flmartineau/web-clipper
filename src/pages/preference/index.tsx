@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import Account from './account';
-import ImageHosting from './imageHosting';
 import Extensions from './extensions';
 import { CenterContainer } from 'components/container';
 import { router, connect } from 'dva';
@@ -38,13 +37,6 @@ const tabs = [
     icon: <Icon type="tool" />,
     title: <FormattedMessage id="preference.tab.extensions" defaultMessage="Extension" />,
     component: Extensions,
-  },
-  {
-    path: 'imageHost',
-    icon: <Icon type="picture" />,
-
-    title: <FormattedMessage id="preference.tab.imageHost" defaultMessage="ImageHost" />,
-    component: ImageHosting,
   },
   {
     path: 'base',

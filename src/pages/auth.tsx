@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { parse } from 'qs';
 import { DvaRouterProps, GlobalStore } from '@/common/types';
@@ -6,14 +6,9 @@ import { Modal, Form, Select } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { FormComponentProps } from 'antd/lib/form';
 import useVerifiedAccount from '@/common/hooks/useVerifiedAccount';
-import ImageHostingSelect from '@/components/ImageHostingSelect';
-import useFilterImageHostingServices, {
-  ImageHostingWithMeta,
-} from '@/common/hooks/useFilterImageHostingServices';
 import { asyncAddAccount } from '@/actions/account';
 import { isEqual } from 'lodash';
 import RepositorySelect from '@/components/RepositorySelect';
-import { BUILT_IN_IMAGE_HOSTING_ID } from '@/common/backend/imageHosting/interface';
 import Container from 'typedi';
 import { ITabService } from '@/service/common/tab';
 
@@ -23,12 +18,10 @@ interface PageQuery {
 }
 
 const mapStateToProps = ({
-  userPreference: { servicesMeta, imageHosting, imageHostingServicesMeta },
+  userPreference: { servicesMeta },
 }: GlobalStore) => {
   return {
-    servicesMeta,
-    imageHosting,
-    imageHostingServicesMeta,
+    servicesMeta
   };
 };
 type PageStateProps = ReturnType<typeof mapStateToProps>;
@@ -48,8 +41,6 @@ const Page: React.FC<PageProps> = props => {
   const {
     form: { getFieldDecorator },
     form,
-    imageHosting,
-    imageHostingServicesMeta,
   } = props;
 
   const {
@@ -63,26 +54,6 @@ const Page: React.FC<PageProps> = props => {
     form: props.form,
     services: props.servicesMeta,
     initAccount: query,
-  });
-
-  const imageHostingWithBuiltIn = useMemo(() => {
-    const res = [...imageHosting];
-    const meta = imageHostingServicesMeta[type];
-    if (meta?.builtIn) {
-      res.push({
-        type,
-        info: {},
-        id: BUILT_IN_IMAGE_HOSTING_ID,
-        remark: meta.builtInRemark,
-      });
-    }
-    return res;
-  }, [imageHosting, imageHostingServicesMeta, type]);
-
-  const supportedImageHostingServices: ImageHostingWithMeta[] = useFilterImageHostingServices({
-    backendServiceType: type,
-    imageHostingServices: imageHostingWithBuiltIn,
-    imageHostingServicesMap: imageHostingServicesMeta,
   });
 
   const memoizeQuery = useDeepCompareMemoize(query);
@@ -106,13 +77,12 @@ const Page: React.FC<PageProps> = props => {
           if (error) {
             return;
           }
-          const { defaultRepositoryId, imageHosting, ...info } = values;
+          const { defaultRepositoryId, ...info } = values;
           props.dispatch(
             asyncAddAccount.started({
               id: id!,
               type,
               defaultRepositoryId,
-              imageHosting,
               info,
               userInfo: userInfo!,
               callback: tabService.closeCurrent,
@@ -149,18 +119,6 @@ const Page: React.FC<PageProps> = props => {
               disabled={!verified}
               loading={verifying}
               repositories={repositories}
-            />
-          )}
-        </Form.Item>
-        <Form.Item
-          label={
-            <FormattedMessage id="preference.accountList.imageHost" defaultMessage="Image Host" />
-          }
-        >
-          {getFieldDecorator('imageHosting')(
-            <ImageHostingSelect
-              disabled={!verified}
-              supportedImageHostingServices={supportedImageHostingServices}
             />
           )}
         </Form.Item>

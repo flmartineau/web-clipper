@@ -5,7 +5,6 @@ export function unpackAccountPreference(account: AccountPreference) {
     id,
     type,
     defaultRepositoryId,
-    imageHosting,
     name,
     avatar,
     description,
@@ -17,7 +16,6 @@ export function unpackAccountPreference(account: AccountPreference) {
     account: {
       type,
       defaultRepositoryId,
-      imageHosting,
       info,
     },
     userInfo: {

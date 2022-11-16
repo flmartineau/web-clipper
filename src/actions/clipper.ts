@@ -25,7 +25,6 @@ export const asyncChangeAccount = actionCreator.async<
   },
   {
     repositories: Repository[];
-    currentImageHostingService?: { type: string };
   },
   any
 >('ASYNC_CHANGE_ACCOUNT');

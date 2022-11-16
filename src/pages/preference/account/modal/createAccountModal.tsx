@@ -1,24 +1,17 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Form, Modal, Select, Icon, Divider } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import styles from './index.less';
-import { ImageHostingServiceMeta, BUILT_IN_IMAGE_HOSTING_ID } from 'common/backend';
-import { UserPreferenceStore, ImageHosting } from '@/common/types';
+import { UserPreferenceStore } from '@/common/types';
 import { FormattedMessage } from 'react-intl';
 import useVerifiedAccount from '@/common/hooks/useVerifiedAccount';
-import useFilterImageHostingServices from '@/common/hooks/useFilterImageHostingServices';
-import ImageHostingSelect from '@/components/ImageHostingSelect';
 import RepositorySelect from '@/components/RepositorySelect';
 import Container from 'typedi';
 import { IPermissionsService } from '@/service/common/permissions';
 import { ITabService } from '@/service/common/tab';
 
 type PageOwnProps = {
-  imageHostingServicesMeta: {
-    [type: string]: ImageHostingServiceMeta;
-  };
   servicesMeta: UserPreferenceStore['servicesMeta'];
-  imageHosting: ImageHosting[];
   visible: boolean;
   onCancel(): void;
   onAdd(id: string, userInfo: any): void;
@@ -35,8 +28,6 @@ const ModalTitle = () => (
 );
 
 const Page: React.FC<PageProps> = ({
-  imageHosting,
-  imageHostingServicesMeta,
   servicesMeta,
   onCancel,
   form,
@@ -54,21 +45,6 @@ const Page: React.FC<PageProps> = ({
     okText,
     oauthLink,
   } = useVerifiedAccount({ form, services: servicesMeta });
-
-  const imageHostingWithBuiltIn = useMemo(() => {
-    const res = [...imageHosting];
-    const meta = imageHostingServicesMeta[type];
-    if (meta?.builtIn) {
-      res.push({ type, info: {}, id: BUILT_IN_IMAGE_HOSTING_ID, remark: meta.builtInRemark });
-    }
-    return res;
-  }, [imageHosting, imageHostingServicesMeta, type]);
-
-  const supportedImageHostingServices = useFilterImageHostingServices({
-    backendServiceType: type,
-    imageHostingServices: imageHostingWithBuiltIn,
-    imageHostingServicesMap: imageHostingServicesMeta,
-  });
 
   const handleOk = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -136,22 +112,6 @@ const Page: React.FC<PageProps> = ({
                   disabled={!verified}
                   loading={verifying}
                   repositories={repositories}
-                />
-              )}
-            </Form.Item>
-            <Form.Item
-              label={
-                <FormattedMessage
-                  id="preference.accountList.imageHost"
-                  defaultMessage="Image Host"
-                />
-              }
-            >
-              {getFieldDecorator('imageHosting')(
-                <ImageHostingSelect
-                  loading={verifying}
-                  disabled={!verified}
-                  supportedImageHostingServices={supportedImageHostingServices}
                 />
               )}
             </Form.Item>
