@@ -10,7 +10,6 @@ import {
   SerializedExtension,
   SerializedExtensionWithId,
 } from '@web-clipper/extensions';
-import useFilterExtensions from '@/common/hooks/useFilterExtensions';
 import { FormattedMessage } from 'react-intl';
 import ExtensionCard from '@/components/ExtensionCard';
 import styles from './index.less';
@@ -114,7 +113,6 @@ const Page: React.FC<RemoteExtensionProps> = ({ host }) => {
     return result.data;
   }, [result]);
 
-  const [remoteToolExtensions, remoteClipExtensions] = useFilterExtensions(remoteExtensions);
   if (loading) {
     return <Skeleton></Skeleton>;
   }
@@ -137,29 +135,12 @@ const Page: React.FC<RemoteExtensionProps> = ({ host }) => {
     <React.Fragment>
       <Typography.Title level={3}>
         <FormattedMessage
-          id="preference.extensions.toolExtensions"
-          defaultMessage="Tool Extensions"
-        />
-      </Typography.Title>
-      <Row gutter={10}>
-        {remoteToolExtensions.map(e => (
-          <Col key={e.id} span={12}>
-            <ExtensionCard
-              className={styles.extensionCard}
-              manifest={getLocaleExtensionManifest(e.manifest, locale)}
-              actions={cardActions(e)}
-            />
-          </Col>
-        ))}
-      </Row>
-      <Typography.Title level={3}>
-        <FormattedMessage
           id="preference.extensions.clipExtensions"
           defaultMessage="Clip Extensions"
         />
       </Typography.Title>
       <Row gutter={10}>
-        {remoteClipExtensions.map(e => (
+        {remoteExtensions.map(e => (
           <Col key={e.id} span={12}>
             <ExtensionCard
               className={styles.extensionCard}

@@ -1,8 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'dva';
 import { GlobalStore } from '@/common/types';
-import { Icon, Row, Col, Typography, Tooltip, Empty, Switch } from 'antd';
-import useFilterExtensions from '@/common/hooks/useFilterExtensions';
+import { Icon, Row, Col, Typography, Tooltip, Switch } from 'antd';
 import {
   setDefaultExtensionId,
   toggleDisableExtension,
@@ -12,7 +11,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import ExtensionCard from '@/components/ExtensionCard';
 import styles from './index.less';
-import { SerializedExtensionWithId, ExtensionType } from '@web-clipper/extensions';
+import { SerializedExtensionWithId } from '@web-clipper/extensions';
 import IconFont from '@/components/IconFont';
 
 const selector = ({
@@ -34,7 +33,6 @@ const Page: React.FC = () => {
     disabledExtensions,
     disabledAutomaticExtensions,
   } = useSelector(selector);
-  const [toolExtensions, clipExtensions] = useFilterExtensions(extensions);
   const handleSetDefault = (extensionId: string) => {
     dispatch(setDefaultExtensionId.started(extensionId));
   };
@@ -61,26 +59,26 @@ const Page: React.FC = () => {
       actions.push(<UninstallButton extension={e} key="uninstall" />);
     }
 
-    if (e.type !== ExtensionType.Tool) {
-      const isDefaultExtension = defaultExtensionId === e.id;
-      const iconStyle = isDefaultExtension ? { color: 'red' } : {};
-      const title = isDefaultExtension ? (
+
+    const isDefaultExtension = defaultExtensionId === e.id;
+    const iconStyle = isDefaultExtension ? {color: 'red'} : {};
+    const title = isDefaultExtension ? (
         <FormattedMessage
-          id="preference.extensions.CancelSetting"
-          defaultMessage="Cancel Setting"
+            id="preference.extensions.CancelSetting"
+            defaultMessage="Cancel Setting"
         />
-      ) : (
+    ) : (
         <FormattedMessage
-          id="preference.extensions.ConfiguredAsDefaultExtension"
-          defaultMessage="Configured as default extension"
+            id="preference.extensions.ConfiguredAsDefaultExtension"
+            defaultMessage="Configured as default extension"
         />
-      );
-      actions.push(
+    );
+    actions.push(
         <Tooltip title={title}>
-          <Icon type="star" key="star" style={iconStyle} onClick={() => handleSetDefault(e.id)} />
+          <Icon type="star" key="star" style={iconStyle} onClick={() => handleSetDefault(e.id)}/>
         </Tooltip>
-      );
-    }
+    );
+
     if (e.manifest.automatic) {
       const automaticDisabled = disabledAutomaticExtensions.some(o => o === e.id);
       actions.push(
@@ -120,24 +118,6 @@ const Page: React.FC = () => {
     <div>
       <Typography.Title level={3}>
         <FormattedMessage
-          id="preference.extensions.toolExtensions"
-          defaultMessage="Tool Extensions"
-        />
-      </Typography.Title>
-      <Row gutter={10}>
-        {toolExtensions.length === 0 && <Empty></Empty>}
-        {toolExtensions.map(e => (
-          <Col key={e.id} span={12}>
-            <ExtensionCard
-              className={styles.extensionCard}
-              manifest={e.manifest}
-              actions={cardActions(e)}
-            ></ExtensionCard>
-          </Col>
-        ))}
-      </Row>
-      <Typography.Title level={3}>
-        <FormattedMessage
           id="preference.extensions.clipExtensions"
           defaultMessage="Clip Extensions"
         />
@@ -153,7 +133,7 @@ const Page: React.FC = () => {
         </Tooltip>
       </Typography.Title>
       <Row gutter={10}>
-        {clipExtensions.map(e => (
+        {extensions.map(e => (
           <Col key={e.id} span={12}>
             <ExtensionCard
               className={styles.extensionCard}

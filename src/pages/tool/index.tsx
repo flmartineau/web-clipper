@@ -1,18 +1,16 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
 import styles from './index.less';
 import ClipExtension from './ClipExtension';
-import ToolExtensions from './toolExtensions';
 import { Button, Icon, Badge, Dropdown, Menu } from 'antd';
 import { connect, routerRedux } from 'dva';
 import { GlobalStore } from '@/common/types';
 import { isEqual } from 'lodash';
 import { ToolContainer } from 'components/container';
 import { selectRepository, asyncChangeAccount } from 'pageActions/clipper';
-import { asyncHideTool, asyncRunExtension } from 'pageActions/userPreference';
+import { asyncHideTool } from 'pageActions/userPreference';
 import { SerializedExtensionWithId, InitContext } from '@web-clipper/extensions';
 import Section from 'components/section';
 import { DvaRouterProps } from 'common/types';
-import useFilterExtensions from '@/common/hooks/useFilterExtensions';
 import { FormattedMessage } from 'react-intl';
 import matchUrl from '@/common/matchUrl';
 import Header from './Header';
@@ -124,8 +122,6 @@ const Page = React.memo<PageProps>(
       return true;
     });
 
-    const [toolExtensions, clipExtensions] = useFilterExtensions(enableExtensions);
-
     const header = useMemo(() => {
       return (
         <Header
@@ -174,19 +170,8 @@ const Page = React.memo<PageProps>(
     return (
       <ToolContainer onClickCloseButton={() => dispatch(asyncHideTool.started())}>
         {header}
-        <ToolExtensions
-          extensions={toolExtensions}
-          onClick={extension =>
-            dispatch(
-              asyncRunExtension.started({
-                pathname,
-                extension,
-              })
-            )
-          }
-        />
         <ClipExtension
-          extensions={clipExtensions}
+          extensions={enableExtensions}
           onClick={router => push(router)}
           pathname={pathname}
         />

@@ -32,7 +32,7 @@ browser.browserAction.onClicked.addListener(async tab => {
   if (!tabId) {
     trackService.trackEvent('Load_Web_Clipper', packageJson.version, 'error');
     alert(
-      'Clipping of this type of page is temporarily unavailable.\n\nRefreshing the page can resolve。\n\n暂时无法剪辑此类型的页面。\n\n刷新页面可以解决。'
+      'Clipping of this type of page is temporarily unavailable.'
     );
     return;
   }
@@ -48,11 +48,11 @@ browser.browserAction.onClicked.addListener(async tab => {
 
     if (browser.runtime.lastError) {
       if (browser.runtime.lastError.message === 'The extensions gallery cannot be scripted.') {
-        alert('The extensions gallery cannot be scripted.\n\n插件商店不允许执行脚本');
+        alert('The extensions gallery cannot be scripted.');
         return;
       }
       alert(
-        'Clipping of this type of page is temporarily unavailable.\n\nRefreshing the page can resolve。\n\n暂时无法剪辑此类型的页面。\n\n刷新页面可以解决。'
+        'Clipping of this type of page is temporarily unavailable.'
       );
       return;
     }

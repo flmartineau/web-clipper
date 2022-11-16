@@ -2,7 +2,6 @@ import { Container } from 'typedi';
 import React from 'react';
 import { IPermissionsService } from '@/service/common/permissions';
 import { updateClipperHeader } from './../actions/clipper';
-import { asyncRunExtension } from './../actions/userPreference';
 import { CompleteStatus } from 'common/backend/interface';
 import { ExtensionType } from '@web-clipper/extensions';
 import { CreateDocumentRequest, UnauthorizedError } from '@/common/backend/services/interface';
@@ -146,7 +145,7 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
     const selector = ({
       clipper: { currentRepository, clipperHeaderForm, repositories, currentAccountId },
       account: { accounts },
-      extension: { extensions, disabledAutomaticExtensions },
+      extension: { extensions },
     }: GlobalStore) => {
       const currentAccount = accounts.find(({ id }) => id === currentAccountId);
       let repositoryId;
@@ -160,26 +159,18 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
         repositoryId = currentRepository.id;
       }
       const extension = extensions.find(o => o.router === pathname);
-      const automaticExtensions = extensions.filter(
-        o =>
-          o.type === ExtensionType.Tool &&
-          o.manifest.automatic &&
-          disabledAutomaticExtensions.every(id => id !== o.id)
-      );
       return {
         repositoryId,
         extensions,
         clipperHeaderForm,
         extension,
         repositories,
-        automaticExtensions,
       };
     };
     const {
       repositoryId,
       clipperHeaderForm,
-      extension,
-      automaticExtensions,
+      extension
     }: ReturnType<typeof selector> = yield select(selector);
     if (!repositoryId) {
       yield put(
@@ -192,11 +183,6 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
     }
     if (!extension) {
       return;
-    }
-    if (extension.type === ExtensionType.Text) {
-      for (const iterator of automaticExtensions) {
-        yield put.resolve(asyncRunExtension.started({ pathname, extension: iterator }));
-      }
     }
     const data = yield select((g: GlobalStore) => g.clipper.clipperData[pathname]);
     let createDocumentRequest: CreateDocumentRequest | null = null;

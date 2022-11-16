@@ -16,21 +16,9 @@ export interface UserInfo {
 }
 
 export interface Repository {
-  /**
-   * 仓库 ID
-   */
   id: string;
-  /**
-   * 仓库名
-   */
   name: string;
-  /**
-   * 团队 ID
-   */
   groupId: string;
-  /**
-   * 团队 名称
-   */
   groupName: string;
 }
 
@@ -51,13 +39,7 @@ export interface ServiceMeta {
    * Backend Service
    */
   service: Type<DocumentService>;
-  /**
-   * 主页
-   */
   homePage?: string;
-  /**
-   * 配置表单
-   */
   form?: any;
   complete?: any;
   oauthUrl?: string;
