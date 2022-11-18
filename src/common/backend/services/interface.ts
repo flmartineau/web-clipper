@@ -56,7 +56,7 @@ export interface DocumentService<T = any> {
 
   getUserInfo(): Promise<UserInfo>;
 
-  refreshToken?(info: T): Promise<T>;
+  refreshToken(info: T): Promise<T>;
 }
 
 interface ErrorOptions {

@@ -1220,6 +1220,11 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@react-buddy/ide-toolbox@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@react-buddy/ide-toolbox/-/ide-toolbox-2.3.0.tgz#c0c2e38bf628bd299e01c219ae4a86a73ada6053"
+  integrity sha512-hTbWHBCSk1IsKI2aThPTBv95svfg99xB9aQQ+FBvLifqeplAuB5QjHVqVFh43n/GcjEWLKa2IWBfNq9BbyR09A==
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"

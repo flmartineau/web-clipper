@@ -65,7 +65,8 @@
     "showdown": "^1.9.0",
     "tldjs": "^2.3.1",
     "typedi": "^0.8.0",
-    "umi-request": "^1.2.15"
+    "umi-request": "^1.2.15",
+    "@react-buddy/ide-toolbox": "^2.3.0"
   },
   "devDependencies": {
     "@diamondyuan/eslint-config-react-typescript": "^7.0.1",

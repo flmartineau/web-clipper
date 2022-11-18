@@ -2,7 +2,9 @@ interface WebClipperConfig {
   icon: string;
   iconDark: string;
   oneNoteCallBack: string;
+  openENTCallback: string;
   oneNoteClientId: string;
+  openENTClientId: string;
   createLogger: boolean;
   serverHost: string;
   resourceHost: string;
@@ -21,9 +23,11 @@ let config: WebClipperConfig = {
   icon: 'icon.png',
   iconDark: 'icon-dark.png',
   oneNoteClientId: '563571ad-cfcd-442a-aa34-046bad24b1b6',
+  openENTClientId: 'web-clipper',
   oneNoteCallBack: 'https://webclipper-oauth.yfd.im/onenote_oauth',
   createLogger: false,
-  // oneNoteCallBack: 'http://localhost:3000/onenote_oauth',
+  // oneNoteCallBack: 'http://localhost:3000',
+  openENTCallback: 'http://localhost:3000',
   serverHost: 'https://api.clipper.website',
   resourceHost: 'https://resource.clipper.website',
   loadRemoteConfig: true,
@@ -39,6 +43,7 @@ if (process.env.NODE_ENV === 'development') {
     loadRemoteConfig: true,
     icon: 'icon-dev.png',
     oneNoteClientId: '01c7500b-98dd-4f37-813f-a959382793ac',
+    openENTClientId: 'web-clipper',
     oneNoteCallBack: 'https://webclipper-oauth.test.yfd.im/onenote_oauth',
     // oneNoteCallBack: 'http://localhost:3000/onenote_oauth',
     createLogger: false

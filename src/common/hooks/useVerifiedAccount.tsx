@@ -34,7 +34,11 @@ const useVerifiedAccount = ({ form, services, initAccount }: UseVerifiedAccountP
       console.log('info', info);
       const Service = service.service;
       const instance = new Service(info);
+      console.log('instance', instance);
+      //const tokens = await instance.refreshToken(info);
+        //console.log('tokens', tokens);
       const userInfo = await instance.getUserInfo();
+      console.log('userInfo', userInfo);
       const repositories = await instance.getRepositories();
       const id = await instance.getId();
       return { userInfo, repositories, id };
