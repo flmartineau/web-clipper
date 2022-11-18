@@ -25,6 +25,9 @@ export default class YuqueDocumentService implements DocumentService<OneNoteBack
 
   constructor({ access_token, refresh_token }: OneNoteBackendServiceConfig) {
     this.config = { access_token, refresh_token };
+    console.log("one_note");
+    console.log("acc", access_token);
+    console.log("ref", refresh_token);
     this.request = axios.create({
       baseURL: BASE_URL,
       headers: { Authorization: `bearer ${access_token}` },
@@ -105,6 +108,7 @@ export default class YuqueDocumentService implements DocumentService<OneNoteBack
   };
 
   refreshToken = async ({ access_token, refresh_token, ...rest }: OneNoteBackendServiceConfig) => {
+    console.log("refreshing ON token");
     const response = await this.request.post<OneNoteRefreshTokenResponse>(
       'https://login.microsoftonline.com/common/oauth2/v2.0/token',
       stringify({

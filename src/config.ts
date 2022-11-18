@@ -13,11 +13,6 @@ interface WebClipperConfig {
   };
 }
 
-export interface RemoteConfig {
-  iconfont: string;
-  chromeWebStoreVersion: string;
-}
-
 let config: WebClipperConfig = {
   googleOauth: {
     clientId: '269705697424-vlu486hs2paqj71p9defgvkbrpo9amcq.apps.googleusercontent.com',

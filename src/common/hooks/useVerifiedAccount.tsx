@@ -31,6 +31,7 @@ const useVerifiedAccount = ({ form, services, initAccount }: UseVerifiedAccountP
   };
   const { result, run, loading } = useAsync(
     async (info: any) => {
+      console.log('info', info);
       const Service = service.service;
       const instance = new Service(info);
       const userInfo = await instance.getUserInfo();
@@ -48,11 +49,14 @@ const useVerifiedAccount = ({ form, services, initAccount }: UseVerifiedAccountP
   );
 
   let loadAccount = useCallback(() => {
+    console.log("form");
     form.validateFields((error, values) => {
       if (error) {
         return;
       }
       const { type, defaultRepositoryId, ...info } = values;
+      console.log(type);
+      console.log(info);
       run(info);
     });
   }, [form, run]);

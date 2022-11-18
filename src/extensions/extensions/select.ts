@@ -5,10 +5,7 @@ export default new TextExtension(
     name: 'Manual selection',
     icon: 'select',
     version: '0.0.1',
-    description: 'Manual selection page element.',
-    i18nManifest: {
-      'zh-CN': { name: '手动选取' },
-    },
+    description: 'Manual selection page element.'
   },
   {
     run: async context => {

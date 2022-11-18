@@ -1,18 +1,4 @@
-import { SerializedExtensionWithId, IExtensionManifest } from '@web-clipper/extensions';
-
-export interface ExtensionRegistry {
-  readonly name: string;
-  readonly description?: string;
-  readonly icon?: string;
-  readonly extensions: IExtensionManifest[];
-  readonly i18n: {
-    [key: string]: {
-      readonly name: string;
-      readonly description?: string;
-      readonly icon?: string;
-    };
-  };
-}
+import { SerializedExtensionWithId } from '@web-clipper/extensions';
 
 export interface ExtensionStore {
   disabledExtensions: string[];

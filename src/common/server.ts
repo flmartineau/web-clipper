@@ -52,17 +52,6 @@ request.interceptors.response.use(
   { global: false }
 );
 
-export interface PostMailRequestBody {
-  to: string;
-  subject: string;
-  html?: string;
-  text?: string;
-}
-
-export const postMail = (data: PostMailRequestBody) => {
-  return request.post('service/email', { data });
-};
-
 export const refresh = () => {
   return request.get<IResponse<string>>('refresh');
 };

@@ -5,10 +5,7 @@ export default new TextExtension(
     name: 'Full Page',
     version: '0.0.1',
     description: 'Save Full Page and turn ro Markdown.',
-    icon: 'copy',
-    i18nManifest: {
-      'zh-CN': { name: '整个页面', description: '把整个页面元素转换为 Markdown' },
-    },
+    icon: 'copy'
   },
   {
     run: async context => {

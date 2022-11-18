@@ -7,10 +7,9 @@ import { GlobalStore } from '@/common/types';
 import Section from 'components/section';
 import { asyncRemoveTool } from '@/actions/userPreference';
 import { FormattedMessage } from 'react-intl';
-import Share from '@/components/share';
 
 const Page: React.FC = () => {
-  const { servicesMeta, currentAccount, completeStatus, createDocumentRequest } = useSelector(
+  const { servicesMeta, currentAccount, completeStatus } = useSelector(
     ({
       clipper: { completeStatus, currentAccountId, createDocumentRequest },
       userPreference: { servicesMeta },
@@ -64,9 +63,6 @@ const Page: React.FC = () => {
         )}
       </Section>
       {Complete && <Complete status={completeStatus}> </Complete>}
-      <Section title={<FormattedMessage id="page.complete.share" defaultMessage="Share" />}>
-        <Share content={createDocumentRequest!.content}></Share>
-      </Section>
     </ToolContainer>
   );
 };

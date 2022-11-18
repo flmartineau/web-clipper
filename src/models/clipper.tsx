@@ -66,6 +66,8 @@ const model = new DvaModelBuilder(defaultState, 'clipper')
       account: { type, info },
       userInfo,
     } = unpackAccountPreference(currentAccount);
+    console.log('currentAccount', currentAccount);
+    console.log(unpackAccountPreference(currentAccount));
     const documentService = documentServiceFactory(type, info);
     const permissionsService = Container.get(IPermissionsService);
     if (selectState.servicesMeta[type]?.permission) {

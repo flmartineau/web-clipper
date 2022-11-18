@@ -1,6 +1,7 @@
 {
   "auth.modal.title": "",
   "backend.services.onenote_oauth.name": "",
+  "backend.services.open_ent.name": "Open ENT",
   "backend.services.server_chan.accessToken.message": "",
   "backend.services.server_chan.name": "",
   "background.not_support_message": "",

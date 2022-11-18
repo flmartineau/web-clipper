@@ -56,6 +56,9 @@ for param in "$@"; do
   install)
     buildYarn && compileDev
     ;;
+  buildYarn)
+      buildYarn
+      ;;
   dev)
     compileDev
     ;;

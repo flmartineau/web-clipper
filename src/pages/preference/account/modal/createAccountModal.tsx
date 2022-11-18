@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Modal, Select, Icon, Divider } from 'antd';
+import { Form, Modal, Select, Divider } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import styles from './index.less';
 import { UserPreferenceStore } from '@/common/types';
@@ -21,9 +21,6 @@ type PageProps = PageOwnProps & FormComponentProps;
 const ModalTitle = () => (
   <div className={styles.modalTitle}>
     <FormattedMessage id="preference.accountList.addAccount" defaultMessage="Add Account" />
-    <a href={'https://www.yuque.com/yuqueclipper/help_cn/bind_account'} target="_blank">
-      <Icon type="question-circle" />
-    </a>
   </div>
 );
 
@@ -57,13 +54,16 @@ const Page: React.FC<PageProps> = ({
       }
     }
     if (oauthLink) {
+      console.log('oauthLink', oauthLink);
       Container.get(ITabService).create({
         url: oauthLink.props.href,
       });
       onCancel();
     } else if (verified && id) {
+      console.log('verified et id');
       onAdd(id, userInfo);
     } else {
+      console.log('loadAccount');
       loadAccount();
     }
   };

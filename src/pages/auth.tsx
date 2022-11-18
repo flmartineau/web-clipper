@@ -73,11 +73,21 @@ const Page: React.FC<PageProps> = props => {
       }}
       title={<FormattedMessage id="auth.modal.title" defaultMessage="Account Config" />}
       onOk={() => {
+        console.log('ok');
         form.validateFields((error, values) => {
           if (error) {
             return;
           }
           const { defaultRepositoryId, ...info } = values;
+          console.log("AUTH");
+          console.log({
+            id: id!,
+            type,
+            defaultRepositoryId,
+            info,
+            userInfo: userInfo!,
+            callback: tabService.closeCurrent,
+          });
           props.dispatch(
             asyncAddAccount.started({
               id: id!,
