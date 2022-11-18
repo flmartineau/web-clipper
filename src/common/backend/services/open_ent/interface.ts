@@ -14,10 +14,9 @@ export interface OneNoteNotebooksResponse {
   }[];
 }
 
-export interface OneNoteUserInfoResponse {
-  id: string;
-  displayName: string;
-  userPrincipalName: string;
+export interface OpenENTUserInfoResponse {
+  userId: string;
+  username: string;
 }
 
 export interface OneNoteCreateDocumentResponse {

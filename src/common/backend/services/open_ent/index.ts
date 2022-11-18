@@ -12,7 +12,6 @@ const oauthUrl = `http://localdev:8090/auth/oauth2/auth?${stringify({
   client_id: config.openENTClientId,
   state: Container.get(IConfigService).id,
   response_type: 'code',
-  //response_mode: 'query',
   redirect_uri: config.openENTCallback,
 })}`;
 
@@ -27,9 +26,6 @@ export default (): ServiceMeta => {
     service: Service,
     oauthUrl,
     form: form,
-    homePage: 'http://localdev:8090/',
-    permission: {
-      origins: ['https://graph.microsoft.com/*'],
-    },
+    homePage: 'http://localdev:8090/'
   };
 };

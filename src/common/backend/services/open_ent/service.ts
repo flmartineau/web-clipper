@@ -3,10 +3,10 @@ import axios, { AxiosInstance } from 'axios';
 import md5 from '@web-clipper/shared/lib/md5';
 import {
   OneNoteNotebooksResponse,
-  OneNoteUserInfoResponse,
   OneNoteCreateDocumentResponse,
   OneNoteBackendServiceConfig,
   OneNoteRefreshTokenResponse,
+  OpenENTUserInfoResponse,
 } from './interface';
 import _ from 'lodash';
 import { Repository, UserInfo, UnauthorizedError } from '../interface';
@@ -16,7 +16,7 @@ import { stringify } from 'qs';
 
 const converter = new showdown.Converter();
 
-const BASE_URL = `https://graph.microsoft.com/`;
+const BASE_URL = `https://localdev:8090`;
 
 export default class YuqueDocumentService implements DocumentService<OneNoteBackendServiceConfig> {
   private request: AxiosInstance;
@@ -51,13 +51,13 @@ export default class YuqueDocumentService implements DocumentService<OneNoteBack
   getId = () => md5(this.config.access_token);
 
   getUserInfo = async (): Promise<UserInfo> => {
-    const response = await this.request.get<OneNoteUserInfoResponse>('v1.0/me');
+    const response = await this.request.get<OpenENTUserInfoResponse>('/auth/oauth2/userinfo');
     const { data } = response;
     return {
-      name: data.displayName,
-      description: data.userPrincipalName,
+      name: data.username,
+      description: '',
       avatar: '',
-      homePage: 'https://www.onenote.com/notebooks',
+      homePage: 'http://localdev:8090/',
     };
   };
 

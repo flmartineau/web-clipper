@@ -27,7 +27,7 @@ let config: WebClipperConfig = {
   oneNoteCallBack: 'https://webclipper-oauth.yfd.im/onenote_oauth',
   createLogger: false,
   // oneNoteCallBack: 'http://localhost:3000',
-  openENTCallback: 'http://localhost:3000',
+  openENTCallback: 'https://webclipper-oauth.yfd.im/open_ent',
   serverHost: 'https://api.clipper.website',
   resourceHost: 'https://resource.clipper.website',
   loadRemoteConfig: true,
@@ -46,7 +46,8 @@ if (process.env.NODE_ENV === 'development') {
     openENTClientId: 'web-clipper',
     oneNoteCallBack: 'https://webclipper-oauth.test.yfd.im/onenote_oauth',
     // oneNoteCallBack: 'http://localhost:3000/onenote_oauth',
-    createLogger: false
+    createLogger: false,
+    openENTCallback: 'https://webclipper-oauth.yfd.im/open_ent',
   });
 }
 
